@@ -1,48 +1,32 @@
 
 
 const BASE_URL  =  "https://backend-task-production.up.railway.app"
+const GET_ALL_NOTES  = BASE_URL + "/notes"
+const UPDATE_NOTE = BASE_URL + "/notes/update"
+const DELETE_NOTE = BASE_URL + "/notes"
+const ADD_NOTE =   BASE_URL + "/notes/add"
 
 //Fetch and display notes on page load
-// window.onload = async () => {
-//     console.log(BASE_URL +'/notes');
-//     const api  = "https://backend-task-production.up.railway.app/notes"
-//     try {
-//         const response = await fetch(api);
-//         console.log(BASE_URL +'/notes');
-//         const notes = await response.json();
-//         notes.forEach(addNoteToList);
-//     } catch (err) {
-//         console.error('Error in fetching notes : ', err);
-//     }
-// };
-
-window.onload = async() => {
-    fetch('https://backend-task-production.up.railway.app/notes')
-  .then(response => {
-    if (!response.ok) {
-                
-      throw new Error('Network response was not ok');
+window.onload = async () => {
+    console.log(GET_ALL_NOTES);
+    const api  = "https://backend-task-production.up.railway.app/notes"
+    try {
+        const response = await fetch(api);
+        console.log(BASE_URL +'/notes');
+        const notes = await response.json();
+        notes.forEach(addNoteToList);
+    } catch (err) {
+        console.error('Error in fetching notes : ', err);
     }
-    return response.json();
-  })
-  .then(data => {
-    console.log(BASE_URL +'/notes');
-    console.log
-                // const notes =  response.json();
-                // notes.forEach(addNoteToList);
-    
-  })
-  .catch(error => {
-    console.log('There was a problem with the fetch operation:', error);
-  });
-}
+};
+
 
 document.getElementById('noteForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const title = document.getElementById('title').value;
     const content = document.getElementById('content').value;
     try {
-        const response = await fetch(BASE_URL + '/notes/add', {
+        const response = await fetch(ADD_NOTE, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -111,7 +95,7 @@ async function editNote(noteId) {
     const newTitle = prompt('Enter new title');
     const newContent = prompt('Enter new content');
     try {
-        const response = await fetch(BASE_URL + `/notes/update/${noteId}`, {
+        const response = await fetch(UPDATE_NOTE+`/${noteId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -132,7 +116,7 @@ async function editNote(noteId) {
 
 async function deleteNote(noteId) {
     try {
-        const response = await fetch(BASE_URL + `/notes/${noteId}`, {
+        const response = await fetch(DELETE_NOTE + `/${noteId}`, {
             method: 'DELETE'
         });
         if (response.status !== 200) {
